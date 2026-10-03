@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz Website</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url("https://i.pinimg.com/originals/db/34/d4/db34d40b271fb59477621550bf73ea0b.jpg");
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quiz-container {
+            width: 500px;
+            background-color:white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+       
+
+        #welcome {
+            text-align: center;
+        }
+
+        #welcome h1 {
+            color: #667eea;
+            font-size: 35px;
+        }
+
+        #welcome p {
+            color: #555;
+            font-size: 18px;
+        }
+
+        #start-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: #667eea;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        #start-btn:hover {
+            background-color: #4f5fd5;
+        }
+
+
+        
+
+        #quiz {
+            display: none;
+        }
+
+        #quiz h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        #question-number {
+            text-align: center;
+            color: #666;
+        }
+
+        #question {
+            font-size: 22px;
+            color: #222;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background-color: white;
+            text-align: left;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background-color: #f0f0ff;
+            border-color: #667eea;
+        }
+
+        .correct {
+            background-color: #4CAF50 !important;
+            color: white;
+        }
+
+        .wrong {
+            background-color: #f44336 !important;
+            color: white;
+        }
+
+        #next-btn,
+        #restart-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background-color: #667eea;
+            color: white;
+            font-size: 17px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        #next-btn:hover,
+        #restart-btn:hover {
+            background-color: #4f5fd5;
+        }
+
+
+      
+        #result {
+            text-align: center;
+            display: none;
+        }
+
+        #result h1 {
+            color: #667eea;
+        }
+
+        #score {
+            font-size: 30px;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="quiz-container">
+
+
+       
+
+        <div id="welcome">
+
+            <h1>🧠 Welcome to Quiz</h1>
+
+            <p>Test your knowledge with our quiz!</p>
+
+            <p>There are 15 questions.</p>
+
+            <button id="start-btn">
+                Start Quiz
+            </button>
+
+        </div>
+
+
+        
+
+        <div id="quiz">
+
+            <h1>🧠 Online Quiz</h1>
+
+            <p id="question-number"></p>
+
+            <h2 id="question"></h2>
+
+            <div id="options"></div>
+
+            <button id="next-btn">
+                Next Question
+            </button>
+
+        </div>
+
+
+       
+
+        <div id="result">
+
+            <h1>🎉 Quiz Completed!</h1>
+
+            <h2>Your Score</h2>
+
+            <p id="score"></p>
+
+            <button id="restart-btn">
+                Restart Quiz
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        
+        const questionBank = [
+
+    {
+        question: "What does HTML stand for?",
+        options: [
+            "Hyper Text Markup Language",
+            "High Text Machine Language",
+            "Hyperlink Text Markup Language",
+            "Home Tool Markup Language"
+        ],
+        answer: 0
+    },
+
+    {
+        question: "Which language is used to style webpages?",
+        options: ["Python", "CSS", "Java", "SQL"],
+        answer: 1
+    },
+
+    {
+        question: "Which language makes webpages interactive?",
+        options: ["HTML", "CSS", "JavaScript", "SQL"],
+        answer: 2
+    },
+
+    {
+        question: "Which tag is used for a paragraph?",
+        options: ["<h1>", "<p>", "<div>", "<para>"],
+        answer: 1
+    },
+
+    {
+        question: "Which symbol represents an ID selector in CSS?",
+        options: [".", "#", "*", "@"],
+        answer: 1
+    },
+
+    {
+        question: "Which keyword declares a variable in JavaScript?",
+        options: ["variable", "var", "integer", "string"],
+        answer: 1
+    },
+
+    {
+        question: "Which HTML tag creates a link?",
+        options: ["<link>", "<a>", "<href>", "<url>"],
+        answer: 1
+    },
+
+    {
+        question: "Which CSS property changes text color?",
+        options: [
+            "font-color",
+            "text-color",
+            "color",
+            "background-color"
+        ],
+        answer: 2
+    },
+
+    {
+        question: "Which method prints data in the console?",
+        options: [
+            "console.log()",
+            "print()",
+            "display()",
+            "write()"
+        ],
+        answer: 0
+    },
+
+    {
+        question: "Which HTML tag displays an image?",
+        options: ["<picture>", "<image>", "<img>", "<src>"],
+        answer: 2
+    },
+
+    {
+        question: "Which property changes the background color?",
+        options: [
+            "background-color",
+            "color",
+            "bgcolor",
+            "background"
+        ],
+        answer: 0
+    },
+
+    {
+        question: "Which HTML tag creates a heading?",
+        options: ["<head>", "<h1>", "<heading>", "<title>"],
+        answer: 1
+    },
+
+    {
+        question: "Which operator is used for addition in JavaScript?",
+        options: ["*", "+", "-", "/"],
+        answer: 1
+    },
+
+    {
+        question: "Which CSS property changes font size?",
+        options: [
+            "text-size",
+            "font-style",
+            "font-size",
+            "size"
+        ],
+        answer: 2
+    },
+
+    {
+        question: "Which tag creates an unordered list?",
+        options: ["<ol>", "<ul>", "<li>", "<list>"],
+        answer: 1
+    },
+
+    {
+        question: "Which tag creates a list item?",
+        options: ["<item>", "<list>", "<li>", "<ul>"],
+        answer: 2
+    },
+
+    {
+        question: "Which language is mainly used for webpage structure?",
+        options: ["CSS", "JavaScript", "HTML", "Python"],
+        answer: 2
+    },
+
+    {
+        question: "Which CSS property makes text bold?",
+        options: [
+            "font-weight",
+            "font-bold",
+            "text-bold",
+            "weight"
+        ],
+        answer: 0
+    },
+
+    {
+        question: "Which keyword creates a constant in JavaScript?",
+        options: ["constant", "const", "let", "fixed"],
+        answer: 1
+    },
+
+    {
+        question: "Which symbol is used for a class selector in CSS?",
+        options: ["#", ".", "*", "$"],
+        answer: 1
+    },
+    {
+        question: "Which HTML tag is used for a line break?",
+        options: ["<break>", "<br>", "<lb>", "<line>"],
+        answer: 1
+    },
+    {
+        question: "Which method is used to add an element to the end of an array in JavaScript?",
+        options: ["push()", "pop()", "shift()", "unshift()"],
+        answer: 0
+    },
+    {
+        question: "Which CSS property is used to change the font family?",
+        options: ["font-family", "text-font", "font-style", "font-type"],
+        answer: 0
+    },
+    {
+        question: "Which HTML tag is used to create a table?",
+        options: ["<table>", "<tab>", "<tr>", "<td>"],
+        answer: 0
+    },
+    {
+        question: "Which JavaScript function is used to parse a string to an integer?",
+        options: ["parseInt()", "toInteger()", "int()", "parse()"],
+        answer: 0
+    },
+    {
+        question: "Which CSS property is used to change the text alignment?",
+        options: ["text-align", "align-text", "text-position", "align"],
+        answer: 0
+    },
+    {
+        question: "Which HTML tag is used to create a form?",
+        options: ["<form>", "<input>", "<submit>", "<action>"],
+        answer: 0
+    },
+    {
+        question: "Which JavaScript method is used to remove the last element from an array?",
+        options: ["pop()", "push()", "shift()", "unshift()"],
+        answer: 0
+    }
+
+];
+
+
+
+
+let questions = [];
+
+
+let usedQuestions = [];
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+
+
+const welcome = document.getElementById("welcome");
+
+const startButton =
+    document.getElementById("start-btn");
+
+const quiz =
+    document.getElementById("quiz");
+
+const result =
+    document.getElementById("result");
+
+const questionNumber =
+    document.getElementById("question-number");
+
+const question =
+    document.getElementById("question");
+
+const options =
+    document.getElementById("options");
+
+const nextButton =
+    document.getElementById("next-btn");
+
+const scoreText =
+    document.getElementById("score");
+
+const restartButton =
+    document.getElementById("restart-btn");
+
+
+
+
+function createQuiz() {
+
+    if (questionBank.length - usedQuestions.length < 10) {
+
+        usedQuestions = [];
+
+    }
+
+
+    
+
+    let availableQuestions =
+        questionBank.filter(function(question) {
+
+            return !usedQuestions.includes(question);
+
+        });
+
+
+    
+
+    availableQuestions.sort(function() {
+
+        return Math.random() - 0.5;
+
+    });
+
+
+    
+
+    questions =
+        availableQuestions.slice(0, 10);
+
+
+    
+
+    questions.forEach(function(question) {
+
+        usedQuestions.push(question);
+
+    });
+
+}
+
+
+
+
+startButton.onclick = function() {
+
+    welcome.style.display = "none";
+
+    quiz.style.display = "block";
+
+    result.style.display = "none";
+
+    currentQuestion = 0;
+
+    score = 0;
+
+    createQuiz();
+
+    showQuestion();
+
+};
+
+
+
+
+function showQuestion() {
+
+    answered = false;
+
+    let q = questions[currentQuestion];
+
+
+    questionNumber.innerText =
+        "Question " +
+        (currentQuestion + 1) +
+        " of " +
+        questions.length;
+
+
+    question.innerText =
+        q.question;
+
+
+    options.innerHTML = "";
+
+
+  
+
+    q.options.forEach(function(option, index) {
+
+        let button =
+            document.createElement("button");
+
+
+        button.innerText = option;
+
+
+        button.classList.add("option");
+
+
+        button.onclick = function() {
+
+            checkAnswer(button, index);
+
+        };
+
+
+        options.appendChild(button);
+
+    });
+
+}
+
+
+
+
+function checkAnswer(button, selectedAnswer) {
+
+    if (answered) {
+
+        return;
+
+    }
+
+
+    answered = true;
+
+
+    let correctAnswer =
+        questions[currentQuestion].answer;
+
+
+    let allOptions =
+        document.querySelectorAll(".option");
+
+
+    if (selectedAnswer === correctAnswer) {
+
+        button.classList.add("correct");
+
+        score++;
+
+    }
+
+    else {
+
+        button.classList.add("wrong");
+
+        allOptions[correctAnswer]
+            .classList.add("correct");
+
+    }
+
+}
+
+
+
+nextButton.onclick = function() {
+
+    if (!answered) {
+
+        alert("Please select an answer!");
+
+        return;
+
+    }
+
+
+    currentQuestion++;
+
+
+    if (currentQuestion < questions.length) {
+
+        showQuestion();
+
+    }
+
+    else {
+
+        showResult();
+
+    }
+
+};
+
+
+
+
+function showResult() {
+
+    quiz.style.display = "none";
+
+    result.style.display = "block";
+
+
+    scoreText.innerText =
+        score + " / " + questions.length;
+
+}
+
+
+restartButton.onclick = function() {
+
+    currentQuestion = 0;
+
+    score = 0;
+
+
+    result.style.display = "none";
+
+    quiz.style.display = "block";
+
+
+   
+    createQuiz();
+
+    showQuestion();
+
+};
+    </script>
+
+</body>
+</html>
